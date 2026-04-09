@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pizza_app/menu_category.dart';
+import './sample_menu.dart';
+import 'food_item.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,46 +40,31 @@ class MenuScreen extends StatelessWidget {
         title: const Text('Menu'),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              HeadlineText(
-                'Starters',
-              ),
-              FoodMenuItem(
-                FoodItem(
-                    'Garlic Knots',
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                    599
-                ),
-              ),
-              FoodMenuItem(
-                FoodItem(
-                    'Chicken Wings (6pcs)',
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                    899
-                ),
-              ),
-              HeadlineText(
-                'Pizzas',
-              ),
-              HeadlineText(
-                'Drinks',
-              ),
-            ],
-          ),
+        child: ListView.builder(
+          itemCount: menuCategories.length,
+          itemBuilder: (context, index)  =>
+              FoodMenuSection(menuCategories[index]),
         ),
       ),
     );
   }
 }
 
-class FoodItem {
-  final String name;
-  final String description;
-  final int priceInCents;
+class FoodMenuSection extends StatelessWidget {
+  final MenuCategory menuCategory;
 
-  FoodItem(this.name, this.description, this.priceInCents);
+  const FoodMenuSection(this.menuCategory, { super.key });
+
+  build(BuildContext context) {
+    return Column(
+      children: [
+        HeadlineText(
+          menuCategory.title,
+        ),
+        ...menuCategory.foodItems.map(FoodMenuItem.new),
+      ],
+    );
+  }
 }
 
 class FoodMenuItem extends StatelessWidget {
