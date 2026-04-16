@@ -1,8 +1,10 @@
 
+import 'package:flutter/foundation.dart';
+
 import 'food_item.dart';
 import 'shopping_cart_item.dart';
 
-class ShoppingCart {
+class ShoppingCart extends ChangeNotifier {
   final _items = <ShoppingCartItem>[];
 
   int get numDistinctItems => _items.length;
@@ -21,9 +23,11 @@ class ShoppingCart {
     } else {
       _items[existingItemIndex] = ShoppingCartItem(foodItem, _items[existingItemIndex].quantity + quantity);
     }
+    notifyListeners();
   }
 
   removeItem(FoodItem foodItem) {
     _items.removeWhere((item) => item.foodItem == foodItem);
+    notifyListeners();
   }
 }

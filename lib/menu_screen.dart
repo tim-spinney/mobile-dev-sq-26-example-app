@@ -3,21 +3,31 @@ import 'package:flutter/material.dart';
 import 'menu_category.dart';
 import 'sample_menu.dart';
 import 'food_item.dart';
+import 'shopping_cart.dart';
 
 class MenuScreen extends StatelessWidget {
+  final ShoppingCart _shoppingCart = ShoppingCart();
 
-  const MenuScreen({super.key});
+  MenuScreen({super.key});
 
   build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Menu'),
+        actions: [
+          const Icon(Icons.shopping_cart),
+          ListenableBuilder(
+            listenable: _shoppingCart,
+            builder: (context, _) => Text('${_shoppingCart.totalQuantities}',),
+          ),
+        ],
+        actionsPadding: EdgeInsets.all(4),
       ),
       body: SafeArea(
         child: ListView.builder(
           itemCount: menuCategories.length,
           itemBuilder: (context, index)  =>
-              _FoodMenuSection(menuCategories[index]),
+              _FoodMenuSection(menuCategories[index], _shoppingCart),
         ),
       ),
     );
@@ -26,8 +36,9 @@ class MenuScreen extends StatelessWidget {
 
 class _FoodMenuSection extends StatelessWidget {
   final MenuCategory menuCategory;
+  final ShoppingCart shoppingCart;
 
-  const _FoodMenuSection(this.menuCategory, { super.key });
+  const _FoodMenuSection(this.menuCategory, this.shoppingCart, { super.key });
 
   build(BuildContext context) {
     return Column(
@@ -36,7 +47,9 @@ class _FoodMenuSection extends StatelessWidget {
           menuCategory.title,
           style: Theme.of(context).textTheme.headlineLarge,
         ),
-        ...menuCategory.foodItems.map(_FoodMenuItem.new),
+        ...menuCategory.foodItems.map(
+                (foodItem) => _FoodMenuItem(foodItem, shoppingCart)
+        ),
       ],
     );
   }
@@ -44,8 +57,13 @@ class _FoodMenuSection extends StatelessWidget {
 
 class _FoodMenuItem extends StatelessWidget {
   final FoodItem foodItem;
+  final ShoppingCart shoppingCart;
 
-  const _FoodMenuItem(this.foodItem, {super.key});
+  const _FoodMenuItem(this.foodItem, this.shoppingCart, {super.key});
+
+  _onAddPressed() {
+    shoppingCart.addItem(foodItem, 1);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +80,7 @@ class _FoodMenuItem extends StatelessWidget {
           ),
           subtitle: Text(foodItem.description),
           trailing: ElevatedButton(
-            onPressed: () {},
+            onPressed: _onAddPressed,
             child: Text('Add to cart'),
           ),
         ),
