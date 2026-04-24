@@ -6,4 +6,6 @@ class ShoppingCartItem {
   final int quantity;
 
   ShoppingCartItem(this.foodItem, this.quantity);
+
+  int get totalPriceInCents => foodItem.priceInCents * quantity;
 }

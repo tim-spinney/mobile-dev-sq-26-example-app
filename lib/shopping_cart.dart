@@ -14,6 +14,14 @@ class ShoppingCart extends ChangeNotifier {
       (total, item) => total + item.quantity
   );
 
+  // Open question: do you consider this defensive copy to be worth the runtime cost?
+  List<ShoppingCartItem> get items => [..._items];
+
+  int get grandTotalPriceInCents => _items.fold(
+    0,
+    (total, item) => total + item.totalPriceInCents,
+  );
+
   addItem(FoodItem foodItem, int quantity) {
     final existingItemIndex = _items.indexWhere(
             (item) => item.foodItem == foodItem

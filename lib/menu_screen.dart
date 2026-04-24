@@ -1,13 +1,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'menu_category.dart';
 import 'sample_menu.dart';
 import 'food_item.dart';
 import 'shopping_cart.dart';
 
 class MenuScreen extends StatelessWidget {
-  final ShoppingCart _shoppingCart = ShoppingCart();
 
   MenuScreen({super.key});
 
@@ -24,9 +24,8 @@ class MenuScreen extends StatelessWidget {
             icon: Row(
               children: [
                 const Icon(Icons.shopping_cart),
-                ListenableBuilder(
-                  listenable: _shoppingCart,
-                  builder: (context, _) => Text('${_shoppingCart.totalQuantities}',),
+                Consumer<ShoppingCart>(
+                  builder: (context, shoppingCart, _) => Text('${shoppingCart.totalQuantities}',),
                 ),
               ],
             ),
@@ -39,7 +38,7 @@ class MenuScreen extends StatelessWidget {
         child: ListView.builder(
           itemCount: menuCategories.length,
           itemBuilder: (context, index)  =>
-              _FoodMenuSection(menuCategories[index], _shoppingCart),
+              _FoodMenuSection(menuCategories[index]),
         ),
       ),
     );
@@ -48,9 +47,8 @@ class MenuScreen extends StatelessWidget {
 
 class _FoodMenuSection extends StatelessWidget {
   final MenuCategory menuCategory;
-  final ShoppingCart shoppingCart;
 
-  const _FoodMenuSection(this.menuCategory, this.shoppingCart, { super.key });
+  const _FoodMenuSection(this.menuCategory, { super.key });
 
   build(BuildContext context) {
     return Column(
@@ -60,7 +58,7 @@ class _FoodMenuSection extends StatelessWidget {
           style: Theme.of(context).textTheme.headlineLarge,
         ),
         ...menuCategory.foodItems.map(
-                (foodItem) => _FoodMenuItem(foodItem, shoppingCart)
+                (foodItem) => _FoodMenuItem(foodItem)
         ),
       ],
     );
@@ -69,11 +67,15 @@ class _FoodMenuSection extends StatelessWidget {
 
 class _FoodMenuItem extends StatelessWidget {
   final FoodItem foodItem;
-  final ShoppingCart shoppingCart;
 
-  const _FoodMenuItem(this.foodItem, this.shoppingCart, {super.key});
+  const _FoodMenuItem(this.foodItem, {super.key});
 
-  _onAddPressed() {
+  _onAddPressed(BuildContext context) {
+    /* read() is good for when we want to call a mutator on our ChangeNotifier
+       watch() will subscribe us for re-builds on changes which we don't actually
+       want for this widget (yet?).
+     */
+    final shoppingCart = context.read<ShoppingCart>();
     shoppingCart.addItem(foodItem, 1);
   }
 
@@ -92,7 +94,7 @@ class _FoodMenuItem extends StatelessWidget {
           ),
           subtitle: Text(foodItem.description),
           trailing: ElevatedButton(
-            onPressed: _onAddPressed,
+            onPressed: () { _onAddPressed(context); },
             child: Text('Add to cart'),
           ),
         ),
