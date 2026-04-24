@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'menu_screen.dart';
+import 'package:pizza_app/routing.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +10,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       theme: ThemeData(
         useMaterial3: true,
         appBarTheme: AppBarThemeData(backgroundColor: Colors.deepOrangeAccent),
@@ -27,7 +26,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: MenuScreen()
+      routerConfig: router,
     );
   }
 }

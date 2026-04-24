@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'menu_category.dart';
 import 'sample_menu.dart';
 import 'food_item.dart';
@@ -14,12 +15,23 @@ class MenuScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Menu'),
+        centerTitle: true,
         actions: [
-          const Icon(Icons.shopping_cart),
-          ListenableBuilder(
-            listenable: _shoppingCart,
-            builder: (context, _) => Text('${_shoppingCart.totalQuantities}',),
+          IconButton(
+            onPressed: () {
+              context.push('/cart');
+            },
+            icon: Row(
+              children: [
+                const Icon(Icons.shopping_cart),
+                ListenableBuilder(
+                  listenable: _shoppingCart,
+                  builder: (context, _) => Text('${_shoppingCart.totalQuantities}',),
+                ),
+              ],
+            ),
           ),
+
         ],
         actionsPadding: EdgeInsets.all(4),
       ),
