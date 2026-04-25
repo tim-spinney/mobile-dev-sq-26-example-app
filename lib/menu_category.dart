@@ -11,6 +11,4 @@ class MenuCategory {
   const MenuCategory(this.title, this.foodItems);
 
   static MenuCategory fromJson(Map<String, dynamic> json) => _$MenuCategoryFromJson(json);
-
-  Map<String, dynamic> toJson() => _$MenuCategoryToJson(this);
 }

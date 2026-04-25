@@ -1,16 +1,17 @@
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'food_menu.dart';
 import 'menu_category.dart';
-import 'sample_menu.dart';
 import 'food_item.dart';
 import 'shopping_cart.dart';
 
 class MenuScreen extends StatelessWidget {
+  const MenuScreen({super.key});
 
-  MenuScreen({super.key});
-
+  @override
   build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -25,30 +26,74 @@ class MenuScreen extends StatelessWidget {
               children: [
                 const Icon(Icons.shopping_cart),
                 Consumer<ShoppingCart>(
-                  builder: (context, shoppingCart, _) => Text('${shoppingCart.totalQuantities}',),
+                  builder: (context, shoppingCart, _) =>
+                      Text('${shoppingCart.totalQuantities}'),
                 ),
               ],
             ),
           ),
-
         ],
         actionsPadding: EdgeInsets.all(4),
       ),
       body: SafeArea(
-        child: ListView.builder(
-          itemCount: menuCategories.length,
-          itemBuilder: (context, index)  =>
-              _FoodMenuSection(menuCategories[index]),
-        ),
+        child: const _FoodMenuLoader(),
       ),
     );
   }
 }
 
+class _FoodMenuLoader extends StatelessWidget {
+  const _FoodMenuLoader();
+
+  Future<FoodMenu> _loadFoodMenu() => rootBundle.loadStructuredData(
+    'assets/menu.json',
+    (stringData) async => FoodMenu.fromJson(JsonDecoder().convert(stringData)),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    // Exercise: try adding debug prints or breakpoints to _loadFoodMenu(). Does this
+    // run more often than it needs to?
+    return FutureBuilder(
+      future: _loadFoodMenu(),
+      builder: (context, snapshot) {
+        if(snapshot.connectionState == ConnectionState.done) {
+          if(snapshot.hasError || !snapshot.hasData) {
+            // ideally we'd have a more helpful error message and telemetry for this situation
+            return Text('Something has gone wrong with loading the menu. We\'re sorry. Maybe get some Thai food instead?');
+          } else {
+            return _FoodMenuView(snapshot.data!);
+          }
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
+}
+
+class _FoodMenuView extends StatelessWidget {
+  final FoodMenu data;
+
+  const _FoodMenuView(this.data, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: data.categories.length,
+      itemBuilder: (context, index) =>
+          _FoodMenuSection(data.categories[index]),
+    );
+  }
+}
+
+
 class _FoodMenuSection extends StatelessWidget {
   final MenuCategory menuCategory;
 
-  const _FoodMenuSection(this.menuCategory, { super.key });
+  const _FoodMenuSection(this.menuCategory, {super.key});
 
   build(BuildContext context) {
     return Column(
@@ -57,9 +102,7 @@ class _FoodMenuSection extends StatelessWidget {
           menuCategory.title,
           style: Theme.of(context).textTheme.headlineLarge,
         ),
-        ...menuCategory.foodItems.map(
-                (foodItem) => _FoodMenuItem(foodItem)
-        ),
+        ...menuCategory.foodItems.map((foodItem) => _FoodMenuItem(foodItem)),
       ],
     );
   }
@@ -86,15 +129,17 @@ class _FoodMenuItem extends StatelessWidget {
         padding: EdgeInsets.all(8),
         child: ListTile(
           title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(foodItem.name),
-                Text('\$${foodItem.priceInCents/100.0}'),
-              ]
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(foodItem.name),
+              Text('\$${foodItem.priceInCents / 100.0}'),
+            ],
           ),
           subtitle: Text(foodItem.description),
           trailing: ElevatedButton(
-            onPressed: () { _onAddPressed(context); },
+            onPressed: () {
+              _onAddPressed(context);
+            },
             child: Text('Add to cart'),
           ),
         ),
