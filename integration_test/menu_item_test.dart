@@ -6,6 +6,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:pizza_app/food_item.dart';
 import 'package:pizza_app/main.dart';
 import 'package:pizza_app/shopping_cart.dart';
+import 'package:pizza_app/shopping_cart_item.dart';
 
 main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -30,28 +31,5 @@ main() {
   testWidgets('adds item to shopping cart', (tester) async {
 
   });
-
-}
-
-class _FakeShoppingCart extends ChangeNotifier implements ShoppingCart {
-  @override
-  addItem(FoodItem foodItem, int quantity) {
-    // TODO: implement addItem
-    throw UnimplementedError();
-  }
-
-  @override
-  // TODO: implement numDistinctItems
-  int get numDistinctItems => throw UnimplementedError();
-
-  @override
-  removeItem(FoodItem foodItem) {
-    // TODO: implement removeItem
-    throw UnimplementedError();
-  }
-
-  @override
-  // TODO: implement totalQuantities
-  int get totalQuantities => throw UnimplementedError();
 
 }
