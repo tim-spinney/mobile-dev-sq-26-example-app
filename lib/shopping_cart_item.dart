@@ -1,5 +1,5 @@
 
-import 'package:pizza_app/food_item.dart';
+import 'package:pizza_app/model/food_item.dart';
 
 class ShoppingCartItem {
   final FoodItem foodItem;

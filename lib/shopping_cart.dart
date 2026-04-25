@@ -1,7 +1,7 @@
 
 import 'package:flutter/foundation.dart';
 
-import 'food_item.dart';
+import 'model/food_item.dart';
 import 'shopping_cart_item.dart';
 
 class ShoppingCart extends ChangeNotifier {

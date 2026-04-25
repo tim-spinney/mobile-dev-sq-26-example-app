@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'food_menu.dart';
-import 'menu_category.dart';
-import 'food_item.dart';
+import 'model/food_menu.dart';
+import 'model/food_menu_category.dart';
+import 'model/food_item.dart';
 import 'shopping_cart.dart';
 
-class MenuScreen extends StatelessWidget {
-  const MenuScreen({super.key});
+class FoodMenuScreen extends StatelessWidget {
+  const FoodMenuScreen({super.key});
 
   @override
   build(BuildContext context) {
@@ -91,7 +91,7 @@ class _FoodMenuView extends StatelessWidget {
 
 
 class _FoodMenuSection extends StatelessWidget {
-  final MenuCategory menuCategory;
+  final FoodMenuCategory menuCategory;
 
   const _FoodMenuSection(this.menuCategory, {super.key});
 

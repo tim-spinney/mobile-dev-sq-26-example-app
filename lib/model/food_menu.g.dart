@@ -8,7 +8,7 @@ part of 'food_menu.dart';
 
 FoodMenu _$FoodMenuFromJson(Map<String, dynamic> json) => FoodMenu(
   (json['categories'] as List<dynamic>)
-      .map((e) => MenuCategory.fromJson(e as Map<String, dynamic>))
+      .map((e) => FoodMenuCategory.fromJson(e as Map<String, dynamic>))
       .toList(),
 );
 

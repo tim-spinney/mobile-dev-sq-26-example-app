@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:pizza_app/food_item.dart';
+import 'package:pizza_app/model/food_item.dart';
 import 'package:pizza_app/main.dart';
 import 'package:pizza_app/shopping_cart.dart';
 import 'package:pizza_app/shopping_cart_item.dart';
