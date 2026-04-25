@@ -62,7 +62,7 @@ class _FoodMenuLoader extends StatelessWidget {
             // ideally we'd have a more helpful error message and telemetry for this situation
             return Text('Something has gone wrong with loading the menu. We\'re sorry. Maybe get some Thai food instead?');
           } else {
-            return _FoodMenuView(snapshot.data!);
+            return _FoodMenuSectionList(snapshot.data!);
           }
         } else {
           return const Center(
@@ -74,10 +74,10 @@ class _FoodMenuLoader extends StatelessWidget {
   }
 }
 
-class _FoodMenuView extends StatelessWidget {
+class _FoodMenuSectionList extends StatelessWidget {
   final FoodMenu data;
 
-  const _FoodMenuView(this.data, {super.key});
+  const _FoodMenuSectionList(this.data, {super.key});
 
   @override
   Widget build(BuildContext context) {
